@@ -76,7 +76,11 @@ export function findByField ({ query, mock, field }) {
 * ==========================
 */
 export function cleanObject (obj) {
-  return JSON.parse(JSON.stringify(obj));
+  Object.keys(obj).forEach(key =>
+    ((obj[key] && typeof obj[key] === 'object') && cleanObject(obj[key])) ||
+    ((obj[key] === undefined || obj[key] === null) && delete obj[key])
+  );
+  return obj;
 }
 
 
@@ -120,7 +124,6 @@ export function generateToken ({ payload, token }) {
 export function verifyToken ({ payload, token }) {
   jwt.verify(token, payload);
 }
-
 
 
 /*
